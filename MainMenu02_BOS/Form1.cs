@@ -168,23 +168,17 @@
             {
                 System.Diagnostics.Process.Start(@"d:\cafiles\output\frcbd01.bat").WaitForExit();
                 MessageBox.Show("This a option to view generated file!");
-                
             }
         }
         //           
         private void processOfOutFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Are you sure & continue?");
-            
             {
-                System.Diagnostics.Process.Start(@"d:\bendem\nsdl\outfilesn\onlystep1.bat").WaitForExit(); //DTS PACKAGE FOR CONVERSION FROM RAW TO 
+                //System.Diagnostics.Process.Start(@"d:\bendem\nsdl\outfilesn\onlystep1.bat").WaitForExit(); //DTS PACKAGE FOR CONVERSION FROM RAW TO 
                 System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\csvtoExcelBDoutNsdl01\csvtoExcelBDoutNsdl01\bin\Debug\csvtoExcelBDoutNsdl01.exe");
-                System.Diagnostics.Process.Start(@"d:\bendem\nsdl\outfilesn\onlystep2.bat").WaitForExit(); //DTS PACKAGE FOR CONVERSION FROM RAW TO 
             }
-            
-            
         }
-
         
         private void processOfOutfileToolStripMenuItem1_Click(object sender, EventArgs e)
         {
