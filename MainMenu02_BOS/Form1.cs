@@ -9,7 +9,8 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
     using OfficeOpenXml.Style;
-
+    using System.Reflection;
+    using System.Diagnostics;
 
     public partial class Form1 : Form
     {
@@ -173,17 +174,19 @@
         //           
         private void processOfOutFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // short bendem process
             MessageBox.Show("Are you sure & continue?");
             {
                 //System.Diagnostics.Process.Start(@"d:\bendem\nsdl\outfilesn\onlystep1.bat").WaitForExit(); //DTS PACKAGE FOR CONVERSION FROM RAW TO 
-                System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\csvtoExcelBDoutNsdl01\csvtoExcelBDoutNsdl01\bin\Debug\csvtoExcelBDoutNsdl01.exe");
+                //System.Diagnostics.Process.Start(@"D:\bendem\nsdl\outfilesn\onlys1.bat");
+                System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\texttoexcel08\texttoexcel08\bin\Debug\texttoexcel08.exe");
+                System.Diagnostics.Process.Start(@"D:\bendem\nsdl\outfilesn\in200537sh.XLSX").WaitForExit(500);
             }
         }
         
         private void processOfOutfileToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(@"D:\BENDEM\CDSL\OutFilesC\cnvfinal1.bat").WaitForExit();
-            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\cdslbdoutfilecsvtoexcelformat01\cdslbdoutfilecsvtoexcelformat01\bin\Debug\cdslbdoutfilecsvtoexcelformat01.exe").WaitForExit();
+           System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\cdslbdoutfilecsvtoexcelformat01\cdslbdoutfilecsvtoexcelformat01\bin\Debug\cdslbdoutfilecsvtoexcelformat01.exe").WaitForExit();
         }
 
         private void consolidatedFileToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -277,11 +280,7 @@
             this.Close();
         }
 
-        private void summaryAILFirstCallToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-           
-        }
-
+        
         private void fIlesCopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\filesCopyfromSrcToDest\filesCopyfromSrcToDest\bin\Debug\filesCopyfromSrcToDest.exe").WaitForExit();
@@ -292,11 +291,7 @@
         {
             System.Diagnostics.Process.Start(@"D:\pbi_Files\isin_master.pbix").WaitForExit();
         }
-
-        private void closeToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-
-        }
+               
 
         private void closeToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
@@ -329,8 +324,8 @@
 
         private void cSVFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\SplitExcelToCsvByColumn01\SplitExcelToCsvByColumn01\bin\Debug\SplitExcelToCsvByColumn01.exe").WaitForExit();
-            MessageBox.Show("Generation is over pls check it once!!!! at test  CSVFiles Folder ");
+            //System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\SplitExcelToCsvByColumn01\SplitExcelToCsvByColumn01\bin\Debug\SplitExcelToCsvByColumn01.exe").WaitForExit();
+            //MessageBox.Show("Generation is over pls check it once!!!! at test  CSVFiles Folder ");
         }
 
         private void xLSFilesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -372,51 +367,150 @@
             System.Diagnostics.Process.Start(@"d:\brdata\ASBA_BANKS_LIST.xlsx");
         }
 
-        private void adroitInfotechToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void gACMEquityToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(@"d:\vrights\firstcall\readme.txt").WaitForExit();
+
+            //System.Diagnostics.Process.Start(@"d:\vrights\gacmeq\readme.txt").WaitForExit();
             SqlConnection con = new SqlConnection("Data Source=VCCIPL-TECH\\VENTURESQLEXP;Initial Catalog=IPORIGHTSBONUS;Integrated Security=True;");
             con.Open();
-            SqlCommand sql_cmnd1 = new SqlCommand("vbidProcess01", con);
+            SqlCommand sql_cmnd1 = new SqlCommand("SP_BIDPROGACMEQ", con);
             sql_cmnd1.CommandType = CommandType.StoredProcedure;
             sql_cmnd1.ExecuteNonQuery();
-            System.Diagnostics.Process.Start(@"D:\VRights\FirstCall\FcallMoneypro01.bat").WaitForExit();
-            MessageBox.Show("SUMMARY OF BID FIRST CALL PROCESS COMPLETED View the File!!!");
-            string directoryPath = @"d:\VRIGHTS\FIRSTCALL\";
-            var mostRecentFile = new DirectoryInfo(directoryPath)
-             .GetFiles("*.txt")
-             .OrderByDescending(f => f.LastWriteTime)
-             .FirstOrDefault();
-            string notepadPlusPlusPath = @"C:\Program Files\Notepad++\Notepad++.exe";
-            if (File.Exists(notepadPlusPlusPath))
-            {
-                System.Diagnostics.Process.Start(notepadPlusPlusPath, mostRecentFile.FullName).WaitForExit();
-            }
-            MessageBox.Show("!!!PROCESS COMPLETED!!!");
-            string textFilePath = mostRecentFile.FullName;
-            string excelFilePath = (@"D:\VRights\FirstCall\FirstCall_Summary.xls");
-            string[] lines = File.ReadAllLines(textFilePath);
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            var excel = new ExcelPackage();
-            {
-                ExcelWorksheet worksheet = excel.Workbook.Worksheets.Add("Sheet1");
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    string[] columns = lines[i].Split(',');
-                    for (int j = 0; j < columns.Length; j++)
-                    {
-                        worksheet.Cells[i + 1, j + 1].Value = columns[j];
-                    }
-                    FileInfo excelFile = new FileInfo(excelFilePath);
-                    excel.SaveAs(excelFile);
-                }
-                Console.WriteLine("text file has been successfully convert to Excel File");
-            }
+            //System.Diagnostics.Process.Start(@"D:\VRights\GACMDV\pro01.bat").WaitForExit();
+            MessageBox.Show("SUMMARY OF BID PROCESS COMPLETED View the File!!!");
+            //string directoryPath = @"d:\VRIGHTS\GACMDV\";
+            //var mostRecentFile = new DirectoryInfo(directoryPath)
+            // .GetFiles("*.txt")
+            // .OrderByDescending(f => f.LastWriteTime)
+            // .FirstOrDefault();
+            //string notepadPlusPlusPath = @"C:\Program Files\Notepad++\Notepad++.exe";
+            //if (File.Exists(notepadPlusPlusPath))
+            //{
+            //    System.Diagnostics.Process.Start(notepadPlusPlusPath, mostRecentFile.FullName).WaitForExit();
+            //}
+            //MessageBox.Show("!!!PROCESS COMPLETED!!!");
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\csvtoexcelbidtotfile01\csvtoexcelbidtotfile01\bin\Debug\csvtoexcelbidtotfile01.exe").WaitForExit();
+            System.Diagnostics.Process.Start(@"d:\vrights\gacmeq\GACMEQREPORT.xlsx");
         }
 
-        private void adroitInfotechLtdToolStripMenuItem_Click(object sender, EventArgs e)
+        private void gACMDVRToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(@"W:\ARHAM\MERGER\RIGHTS24\1STCALL\REFUND\BID_14062024_Final.xlsx");
+            //System.Diagnostics.Process.Start(@"d:\vrights\gacmeq\readme.txt").WaitForExit();
+            SqlConnection con = new SqlConnection("Data Source=VCCIPL-TECH\\VENTURESQLEXP;Initial Catalog=IPORIGHTSBONUS;Integrated Security=True;");
+            con.Open();
+            SqlCommand sql_cmnd1 = new SqlCommand("SP_BIDPROGACMDV", con);
+            sql_cmnd1.CommandType = CommandType.StoredProcedure;
+            sql_cmnd1.ExecuteNonQuery();
+            //System.Diagnostics.Process.Start(@"D:\VRights\GACMDV\pro01.bat").WaitForExit();
+            MessageBox.Show("SUMMARY OF BID PROCESS COMPLETED View the File!!!");
+            //string directoryPath = @"d:\VRIGHTS\GACMDV\";
+            //var mostRecentFile = new DirectoryInfo(directoryPath)
+            // .GetFiles("*.txt")
+            // .OrderByDescending(f => f.LastWriteTime)
+            // .FirstOrDefault();
+            //string notepadPlusPlusPath = @"C:\Program Files\Notepad++\Notepad++.exe";
+            //if (File.Exists(notepadPlusPlusPath))
+            //{
+            //    System.Diagnostics.Process.Start(notepadPlusPlusPath, mostRecentFile.FullName).WaitForExit();
+            //}
+            //MessageBox.Show("!!!PROCESS COMPLETED!!!");
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\csvtoexcelfile02\csvtoexcelfile02\bin\Debug\csvtoexcelfile02.exe").WaitForExit();
+            System.Diagnostics.Process.Start(@"d:\vrights\gacmdv\GACMDVREPORT.xlsx");
+
+
+        }
+
+        private void eQToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\SplitExcelToCsvByColumn01EQ\SplitExcelToCsvByColumn01EQ\bin\Debug\SplitExcelToCsvByColumn01EQ.exe").WaitForExit();
+            MessageBox.Show("Generation is over pls check it once!!!! at test  CSVFiles Folder ");
+        }
+
+        private void dVRToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\SplitExcelToCsvByColumn01\SplitExcelToCsvByColumn01\bin\Debug\SplitExcelToCsvByColumn01.exe").WaitForExit();
+            MessageBox.Show("Generation is over pls check it once!!!! at test  CSVFiles Folder ");
+        }
+
+        
+        private void equityToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //nse Equity
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\SplitExcelToCsvByColumn01nseeq\SplitExcelToCsvByColumn01nseeq\bin\Debug\SplitExcelToCsvByColumn01nseeq.exe").WaitForExit();
+            MessageBox.Show("Creation of NSE - EQ - BID Mismatches CSV File is ready!!!");
+        }
+
+        private void dVRToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            //Nse DVR
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\SplitExcelToCsvByColumn01nsedvr\SplitExcelToCsvByColumn01nsedvr\bin\Debug\SplitExcelToCsvByColumn01nsedvr.exe").WaitForExit();
+            MessageBox.Show("Creation of NSE - DVR - BID Mismatches CSV File is ready!!!");
+
+        }
+
+        private void equityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //bse equity
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\SplitExcelToCsvByColumn01bseeq\SplitExcelToCsvByColumn01bseeq\bin\Debug\SplitExcelToCsvByColumn01bseeq.exe").WaitForExit();
+            MessageBox.Show("Creation of BSE - EQ - BID Mismatches CSV File is ready!!!");
+       
+        }
+
+        private void dvrToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //bse DVR
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\SplitExcelToCsvByColumn01bsedvr\SplitExcelToCsvByColumn01bsedvr\bin\Debug\SplitExcelToCsvByColumn01bsedvr.exe").WaitForExit();
+            MessageBox.Show("Creation of BSE - DVR - BID Mismatches CSV File is ready!!!");
+
+        
+
+        }
+
+        private void bendemOutFileProcessToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //fullbendem process
+            //System.Diagnostics.Process.Start(@"D:\BENDEM\NSDL\OutFilesN\ONLYS1.bat").WaitForExit();
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\texttoexcel09\texttoexcel09\bin\Debug\texttoexcel09.exe").WaitForExit();
+            MessageBox.Show("Creation in200537.xlsx File is ready!!!");
+        }
+
+        private void fullBendemProcessToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //tobestart
+            MessageBox.Show("Creation CDSL Full Bendem File in Excel Format under Process!!!");
+            //System.Diagnostics.Process.Start(@"D:\BENDEM\CDSL\OutFilesC\cnvcbdfull1.bat").WaitForExit();
+            SqlConnection con = new SqlConnection("Data Source=VCCIPL-TECH\\VENTURESQLEXP;Initial Catalog=VCCIPL;Integrated Security=True;");
+            con.Open();
+            SqlCommand sql_cmnd1 = new SqlCommand("sp_cnvcdslfbd2476", con);
+            sql_cmnd1.CommandType = CommandType.StoredProcedure;
+            sql_cmnd1.ExecuteNonQuery();
+            MessageBox.Show("Processing is on the way!!!");
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\texttoexcelc09\texttoexcelc09\bin\Debug\texttoexcelc09.exe").WaitForExit();
+        }
+
+        private void consolidatedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(@"d:\bendem\NSDL\CONSOLIDATED-NSDL-CDSL-OUTFILE-SHORTBENDEM.xlsx");
+        }
+
+        private void consolidatedFullBendemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(@"d:\bendem\NSDL\CONSOLIDATED-NSDL-CDSL-OUTFILE-FULLBENDEM.xlsx");
+        }
+
+        private void nSDLFileConversionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\odbtest\odbtest\bin\Debug\odbtest.exe").WaitForExit();
+            //System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\nicnvtexttoexcel\nicnvtexttoexcel\bin\Debug\nicnvtexttoexcel.exe").WaitForExit();
+            //System.Diagnostics.Process.Start(@"D:\Brdata\ISINPROCESS\SOURCE\14538_1.xlsx");
+        }
+
+        private void cDSLFileConversionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(@"D:\vccipl_projects\Deployment_Projects\cicnvtexxttoexcel\cicnvtexxttoexcel\bin\Debug\cicnvtexxttoexcel.exe").WaitForExit();
+            System.Diagnostics.Process.Start(@"D:\Brdata\ISINPROCESS\SOURCE\CDSLOUT.xlsx");
+        
         }
     }
 }
